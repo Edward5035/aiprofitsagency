@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, flash, redirect, url_for, ses
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
-from selectolax.parser import HTMLParser
 from urllib.parse import urlparse, urljoin
 import re
 import time

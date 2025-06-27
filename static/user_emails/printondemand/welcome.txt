@@ -1,0 +1,15 @@
+Subject: Welcome to [Your Brand Name] — Let’s Make Something Awesome
+
+Body:
+Hi {{name}},
+
+Thanks for joining the [Your Brand Name] community — where creativity meets quality!
+
+We specialize in unique, print-on-demand products designed to express your personality. Whether you're shopping for yourself or surprising someone, we’ve got the perfect match.
+
+🎁 Enjoy 10% off your first order with code: WELCOME10
+
+Let's create something unforgettable.
+
+— The [Your Brand] Team
+[Shop Now →]

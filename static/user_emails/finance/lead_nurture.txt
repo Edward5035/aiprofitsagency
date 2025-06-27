@@ -1,0 +1,12 @@
+Hi {{name}},
+
+Most people unknowingly make 3 critical financial mistakes that cost them thousands over time.
+
+In our free guide, we break down exactly how to avoid them and set your financial plan up for long-term success.
+
+📥 Download your copy here: [link]
+
+No pressure. Just real value to help you grow.
+
+Sincerely,  
+The {{Your Company Name}} Team

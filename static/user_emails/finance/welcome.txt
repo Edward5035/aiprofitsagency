@@ -1,0 +1,10 @@
+Hi {{name}},
+
+Welcome aboard! You're now part of a growing community focused on smarter money moves, real growth, and financial clarity.
+
+Whether you're planning for retirement, looking to invest smarter, or just want to take control of your finances—we're here to help.
+
+👉 Stay tuned for expert insights, tools, and resources to help you make confident financial decisions.
+
+To your success,  
+{{Your Company Name}}

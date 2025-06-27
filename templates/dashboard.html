@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+{% block title %}AI Profits Agency{% endblock %}
+
+{% block content %}
+<div class="card mt-6 animate__animated animate__fadeIn">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h1 class="page-title">AI-Powered Agency Dashboard</h1>
+    <p class="page-subtitle">Your real-time overview of captured and qualified leads.</p>
+  </div>
+
+  <!-- Unique Summary Panels -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 mb-12">
+<!-- Total Leads -->
+<div class="flex items-center bg-gradient-to-r from-indigo-500 to-blue-600 text-white rounded-2xl p-5 shadow-lg hover:shadow-2xl transition">
+  <div class="flex-shrink-0 mr-4 text-4xl">
+    <i class="fas fa-rocket"></i>
+  </div>
+  <div>
+    <div class="text-sm uppercase tracking-wide font-semibold opacity-90">All Leads Captured</div>
+    <div class="text-2xl font-bold mt-1">{{ session.get('email_count', 0) + session.get('phone_count', 0) }}</div>
+  </div>
+</div>
+
+<!-- Verified Email Leads -->
+<div class="flex items-center bg-gradient-to-r from-emerald-500 to-teal-400 text-white rounded-2xl p-5 shadow-lg hover:shadow-2xl transition">
+  <div class="flex-shrink-0 mr-4 text-4xl">
+    <i class="fas fa-check-circle"></i>
+  </div>
+  <div>
+    <div class="text-sm uppercase tracking-wide font-semibold opacity-90">Verified Email Leads</div>
+    <div class="text-2xl font-bold mt-1">{{ session.get('email_count', 0) }}</div>
+  </div>
+</div>
+
+<!-- Email Contacts -->
+<div class="flex items-center bg-gradient-to-r from-violet-500 to-fuchsia-600 text-white rounded-2xl p-5 shadow-lg hover:shadow-2xl transition">
+  <div class="flex-shrink-0 mr-4 text-4xl">
+    <i class="fas fa-envelope"></i>
+  </div>
+  <div>
+    <div class="text-sm uppercase tracking-wide font-semibold opacity-90">Email Contacts</div>
+    <div class="text-2xl font-bold mt-1">{{ session.get('email_count', 0) }}</div>
+  </div>
+</div>
+
+<!-- Phone Contacts -->
+<div class="flex items-center bg-gradient-to-r from-orange-500 to-rose-600 text-white rounded-2xl p-5 shadow-lg hover:shadow-2xl transition">
+  <div class="flex-shrink-0 mr-4 text-4xl">
+    <i class="fas fa-phone-alt"></i>
+  </div>
+  <div>
+    <div class="text-sm uppercase tracking-wide font-semibold opacity-90">Phone Contacts</div>
+    <div class="text-2xl font-bold mt-1">{{ session.get('phone_count', 0) }}</div>
+  </div>
+</div>
+ </div>
+</div>
+<!-- AI Growth Tracker (New Layout) -->
+<div class="card my-10 px-6 py-6 rounded-2xl shadow-2xl bg-gradient-to-br from-gray-900 via-slate-800 to-gray-950 border border-gray-700 transition-all duration-300 ease-in-out hover:shadow-indigo-500/30">
+
+  <h2 class="text-3xl font-extrabold text-indigo-400 text-center mb-8 tracking-tight">Agency Growth Tracker</h2>
+
+  <!-- Main Stats Row -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6">
+
+    <!-- Lead Counter -->
+    <div class="text-center">
+      <p class="text-sm text-gray-400 uppercase tracking-wider mb-1">Total Captured Leads</p>
+      <h3 class="text-5xl font-black text-emerald-400 drop-shadow-sm">
+        {{ session.get('email_count', 0) + session.get('phone_count', 0) }} / 1000
+      </h3>
+      <p class="text-sm text-gray-500 italic mt-2">You're building your AI empire. Keep going!</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div>
+      <div class="w-full bg-gray-800 rounded-full h-8 overflow-hidden shadow-inner border-2 border-indigo-600">
+        <div class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-in-out"
+             style="width: {{ (session.get('email_count', 0) + session.get('phone_count', 0)) * 100 / 1000 }}%;">
+        </div>
+      </div>
+      <div class="flex justify-between text-xs text-gray-300 font-medium tracking-wider mt-2 px-1">
+        <span>0</span><span>250</span><span>500</span><span>750</span><span>1000</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Milestone Badges (Horizontal Row) -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-xs text-center px-2 mt-4">
+    <div class="text-indigo-300 font-semibold flex flex-col items-center hover:scale-110 transition duration-300">
+      <i class="fas fa-robot fa-lg mb-1 drop-shadow-md"></i> Initiate
+    </div>
+    <div class="text-purple-300 font-semibold flex flex-col items-center hover:scale-110 transition duration-300">
+      <i class="fas fa-chart-line fa-lg mb-1 drop-shadow-md"></i> Growth Mode
+    </div>
+    <div class="text-pink-300 font-semibold flex flex-col items-center hover:scale-110 transition duration-300">
+      <i class="fas fa-bolt fa-lg mb-1 drop-shadow-md"></i> Automation Pro
+    </div>
+    <div class="text-emerald-300 font-semibold flex flex-col items-center hover:scale-110 transition duration-300">
+      <i class="fas fa-gem fa-lg mb-1 drop-shadow-md"></i> Elite Closer
+    </div>
+    <div class="text-yellow-300 font-semibold flex flex-col items-center hover:scale-110 transition duration-300">
+      <i class="fas fa-crown fa-lg mb-1 drop-shadow-md"></i> Profit Master
+    </div>
+  </div>
+
+</div>
+
+<!-- Quick Start Guide Section -->
+<div class="card">
+  <h4 class="text-xl text-center font-semibold text-[var(--primary-color)] mb-6">Your AI Profits Agency Starts Here</h4>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for icon, title, description, color in [
+        ('fa-tachometer-alt', 'AI Profits Hub', 'Access your central AI marketing dashboard.', 'text-yellow-400'),
+        ('fa-fire', 'Hot Buyer Leads', 'Find red-hot, ready-to-buy traffic instantly.', 'text-orange-400'),
+        ('fa-user-friends', 'Lead Vault', 'Manage and organize all your captured leads.', 'text-green-400'),
+        ('fa-envelope', 'Email Lead Finder', 'Discover targeted and verified email leads.', 'text-purple-400'),
+        ('fa-phone', 'Phone Lead Miner', 'Unlock direct phone contacts of prospects.', 'text-teal-400'),
+        ('fa-user-tie', 'Launch AI Site', 'Create high-converting websites with AI.', 'text-red-400'),
+        ('fa-globe', 'My AI Sites', 'Manage all your published AI income websites.', 'text-orange-500'),
+        ('fa-magic', '1-Click Funnel Builder', 'Generate full sales funnels in one click.', 'text-pink-400'),
+        ('fa-envelope-open-text', 'AI Email Blaster', 'Send smart, ready-to-go email campaigns.', 'text-blue-200'),
+        ('fa-robot', 'DFY AutoFunnels', 'Deploy done-for-you automated funnels.', 'text-red-500')
+    ] %}
+    <div class="p-6 rounded-xl border border-[var(--border-main)] shadow-md hover:scale-105 transition-all text-center" style="background-color: var(--card-main); color: var(--text-main);">
+      <i class="fas {{ icon }} fa-2x md:fa-3x lg:fa-4x {{ color }} mb-4"></i>
+      <h6 class="text-lg font-semibold text-[var(--primary-color)]">{{ title }}</h6>
+      <p class="text-[var(--gray-500)]">{{ description }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+</div>
+{% endblock %}

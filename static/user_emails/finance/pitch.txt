@@ -1,0 +1,15 @@
+Hi {{name}},
+
+Imagine a financial plan that’s actually tailored to *you*—not cookie-cutter advice.
+
+At {{Your Company Name}}, our expert advisors work with you 1-on-1 to help you:
+✔️ Maximize savings  
+✔️ Grow your investments  
+✔️ Plan for your dream retirement
+
+💼 Book your free strategy session today: [link]
+
+Now’s the time to take action. Let’s build your wealth, together.
+
+To your financial future,  
+{{Your Name}}

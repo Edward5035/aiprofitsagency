@@ -1,0 +1,1407 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="min-h-screen font-sans" style="background-color: var(--bg-main); color: var(--text-main);">
+
+<div class="w-full px-0 py-0">
+  <div class="bg-[var(--card-main)] rounded-3xl shadow-2xl p-6 sm:p-10 mx-auto" style="border: 1px solid var(--border-main);">
+
+
+
+    <h1 class="text-4xl font-extrabold text-center mb-6 text-[var(--primary-color)]">AI Site Generator</h1>
+
+    <form method="POST"
+          class="bg-[var(--card-main)] border rounded-3xl p-8 shadow-2xl space-y-6 relative"
+          style="border-color: var(--primary-color);">
+
+      <!-- Loading Spark Effect -->
+      <div id="loadingSpark" class="absolute inset-0 flex items-center justify-center bg-opacity-70 bg-gray-900 z-50 hidden">
+        <div class="text-center">
+          <div class="loader mb-4"></div>
+          <p class="text-white font-semibold animate-pulse">Creating your site...</p>
+        </div>
+      </div>
+
+      <!-- Funnel Inputs -->
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-[var(--primary-color-light)]">Funnel Niche</label>
+          <input type="text" name="niche" placeholder="Fitness, SaaS, etc."
+                 class="w-full px-4 py-3 rounded-xl border focus:outline-none focus:ring-2"
+                 style="background-color: var(--bg-blur); color: var(--text-main); border-color: var(--border-main);" required>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-[var(--primary-color-light)]">Goal</label>
+          <select class="w-full px-4 py-3 rounded-xl border bg-white text-gray-800 focus:ring-2 focus:ring-orange-500">
+            <option>Collect Leads</option>
+            <option>Sell Product</option>
+            <option>Build List</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-[var(--primary-color-light)]">Target Audience</label>
+          <input type="text" class="w-full px-4 py-3 rounded-xl border bg-white text-gray-800 focus:ring-2 focus:ring-orange-500" placeholder="e.g. Fitness Coaches, SaaS CEOs">
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-semibold text-[var(--primary-color-light)]">Include A/B Testing?</label>
+          <select class="w-full px-4 py-3 rounded-xl border bg-white text-gray-800 focus:ring-2 focus:ring-orange-500">
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Funnel Generator Button -->
+      <div class="text-center pt-4">
+        <button type="submit"
+                onclick="showLoadingSpark()"
+                class="px-10 py-4 rounded-xl text-white font-semibold bg-gradient-to-r from-yellow-500 to-orange-600 hover:scale-105 transition-transform duration-300 shadow-lg">
+           <i class="fas fa-robot"></i> Create My ProfitSite Now
+        </button>
+      </div>
+    </form>
+
+    
+
+ {% if landing_preview and thank_you_preview and name %}
+<div x-data="{ slide: 1 }" class="mt-12">
+
+  <h2 class="text-3xl font-bold mb-8 text-center text-[var(--primary-color-light)]">
+    <i class="fas fa-eye mr-2"></i> ProfiSites Preview: <span class="capitalize">{{ name.replace('_', ' ') }}</span>
+  </h2>
+
+  <div class="relative border rounded-3xl shadow-2xl overflow-hidden bg-[var(--card-main)] border-[var(--primary-color)] transition-all">
+
+    <!-- Slide Container -->
+    <div class="relative w-full h-[600px] overflow-hidden">
+      <template x-for="i in 2" :key="i">
+        <div x-show="slide === i"
+             x-transition:enter="transition ease-in-out duration-700"
+             x-transition:enter-start="opacity-0 transform translate-x-10"
+             x-transition:enter-end="opacity-100 transform translate-x-0"
+             x-transition:leave="transition ease-in-out duration-500"
+             x-transition:leave-start="opacity-100 transform translate-x-0"
+             x-transition:leave-end="opacity-0 transform -translate-x-10"
+             class="absolute inset-0">
+
+          <!-- Header Label -->
+          <div class="p-4 text-center font-semibold text-xl text-[var(--primary-color-light)] tracking-wide bg-[var(--bg-blur)]">
+            <template x-if="i === 1">📄 <strong>Landing Page</strong></template>
+            <template x-if="i === 2">✅ <strong>Thank You Page</strong></template>
+          </div>
+
+          <!-- Iframe -->
+          <iframe :src="i === 1
+                      ? '{{ url_for('static', filename='sites/' + name + '/landing.html') }}'
+                      : '{{ url_for('static', filename='sites/' + name + '/thank_you.html') }}'"
+                  class="w-full h-[520px] border-none"></iframe>
+
+        </div>
+      </template>
+
+      <!-- Nav Arrows -->
+      <button @click="slide = slide === 1 ? 2 : 1"
+              class="absolute top-1/2 -left-4 transform -translate-y-1/2 bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-full shadow-lg transition-all z-10">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button @click="slide = slide === 1 ? 2 : 1"
+              class="absolute top-1/2 -right-4 transform -translate-y-1/2 bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-full shadow-lg transition-all z-10">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Dot Indicators -->
+    <div class="flex justify-center py-4 bg-[var(--bg-blur)]">
+      <template x-for="n in 2">
+        <span :class="slide === n ? 'bg-orange-500 scale-125' : 'bg-gray-500'"
+              class="w-3 h-3 mx-1 rounded-full inline-block transition-all duration-300"></span>
+      </template>
+    </div>
+
+    <!-- Always-visible Buttons -->
+<div class="flex flex-wrap gap-4 justify-center py-6 bg-[var(--card-main)] border-t border-[var(--border-main)]">
+  <template x-if="slide === 1">
+    <div class="flex gap-4 flex-wrap justify-center">
+      <button onclick="openVisualBuilder('landing')" class="action-btn">
+        <i class="fas fa-magic"></i> Visual Builder
+      </button>
+      <button onclick="editPreview('landing')" class="action-btn">
+        <i class="fas fa-pen"></i> Edit HTML
+      </button>
+      <button onclick="triggerDownload('landing')" class="action-btn">
+        <i class="fas fa-download"></i> Download
+      </button>
+      <span class="tag-score">
+        <i class="fas fa-chart-line"></i> Funnel Score: 87%
+      </span>
+    </div>
+  </template>
+
+  <template x-if="slide === 2">
+    <div class="flex gap-4 flex-wrap justify-center">
+      <button onclick="openVisualBuilder('thank_you')" class="action-btn">
+        <i class="fas fa-magic"></i> Visual Builder
+      </button>
+      <button onclick="editPreview('thank_you')" class="action-btn">
+        <i class="fas fa-pen"></i> Edit HTML
+      </button>
+      <button onclick="triggerDownload('thank_you')" class="action-btn">
+        <i class="fas fa-download"></i> Download
+      </button>
+      <span class="tag-score">
+        <i class="fas fa-vial"></i> A/B Testing: Enabled
+      </span>
+    </div>
+  </template>
+</div>
+
+
+  </div>
+</div>
+{% endif %}
+
+ <div class="mt-16 mb-12 rounded-3xl p-6 shadow-2xl bg-[var(--card-main)] border"
+     style="border-color: var(--primary-color);">
+
+  <h2 class="text-2xl font-bold text-[var(--primary-color-light)] mb-4">Available ProfitSites</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    {% for t in templates[:6] %}
+      <div class="bg-[var(--card-main)] border border-[var(--border-main)] rounded-xl shadow-lg p-4 transition hover:scale-105 hover:shadow-2xl">
+        <h3 class="text-xl font-semibold mb-2 text-[var(--primary-color)] capitalize">{{ t.replace('_', ' ') }}</h3>
+        
+        <!-- Simple iframe that fills the entire area -->
+        <div class="h-[350px] rounded-xl overflow-hidden">
+          <iframe src="{{ url_for('static', filename='sites/' + t + '/landing.html') }}"
+                  class="w-full h-full rounded-lg"
+                  style="border: none; overflow: hidden;"
+                  sandbox="allow-same-origin allow-scripts"
+                  loading="lazy">
+          </iframe>
+        </div>
+        
+        <div class="mt-4 text-center">
+          <form method="POST">
+            <input type="hidden" name="niche" value="{{ t }}">
+            <button type="submit"
+                    class="w-full px-4 py-2 text-white bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg font-semibold hover:scale-105 transition">
+              Use This Template
+            </button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+<!-- Modal Editor -->
+<div id="editorModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 py-8 overflow-auto bg-black bg-opacity-60 hidden">
+  <div class="w-full max-w-5xl bg-[var(--card-main)] rounded-2xl shadow-2xl overflow-hidden animate-fadeIn">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white">
+      <h2 class="text-xl font-bold">Edit ProfitSite</h2>
+      <button onclick="closeEditor()" class="text-2xl hover:scale-110 transition-transform">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <form id="editorForm" class="flex flex-col h-[75vh] p-6 space-y-4">
+      <label for="editorContent" class="font-semibold text-[var(--primary-color-light)]">HTML Code:</label>
+      <textarea id="editorContent" name="html"
+                class="flex-grow w-full resize-none border rounded-lg p-4 font-mono text-sm bg-[var(--bg-blur)] text-[var(--text-main)] focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)]"
+                placeholder="Edit HTML content here..."></textarea>
+
+      <!-- Modal Footer -->
+      <div class="flex justify-end gap-4 pt-4 border-t border-[var(--border-main)]">
+        <button type="button"
+                onclick="closeEditor()"
+                class="px-6 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition">
+          Cancel
+        </button>
+        <button type="submit"
+                class="px-6 py-2 rounded-lg bg-[var(--primary-color)] text-white hover:bg-[var(--primary-color-dark)] transition">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Visual Builder Interface -->
+<div id="visualBuilderModal" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-60 hidden">
+  <div class="w-full h-full max-w-7xl max-h-[90vh] bg-[var(--card-main)] rounded-2xl shadow-2xl overflow-hidden animate-fadeIn flex flex-col">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white">
+      <h2 class="text-xl font-bold">Visual Builder</h2>
+      <button onclick="closeVisualBuilder()" class="text-2xl hover:scale-110 transition-transform">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="flex flex-grow overflow-hidden">
+      <!-- Left Panel: Element Controls -->
+      <div class="w-72 bg-[var(--bg-blur)] border-r border-[var(--border-main)] p-4 flex flex-col h-full overflow-y-auto">
+        <div class="mb-6">
+          <h3 class="font-bold text-[var(--primary-color-light)] mb-3">Page Elements</h3>
+          <div class="space-y-2">
+            <button onclick="addElement('heading')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-heading"></i> Add Heading
+            </button>
+            <button onclick="addElement('paragraph')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-paragraph"></i> Add Paragraph
+            </button>
+            <button onclick="addElement('button')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-square"></i> Add Button
+            </button>
+            <button onclick="addElement('image')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-image"></i> Add Image
+            </button>
+            <button onclick="addElement('form')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-wpforms"></i> Add Form
+            </button>
+            <button onclick="addElement('video')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-video"></i> Add Video
+            </button>
+            <button onclick="addElement('testimonial')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-quote-right"></i> Add Testimonial
+            </button>
+            <button onclick="addElement('divider')" class="builder-btn w-full text-left flex items-center gap-2">
+              <i class="fas fa-grip-lines"></i> Add Divider
+            </button>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="font-bold text-[var(--primary-color-light)] mb-3">Element Properties</h3>
+          <div id="elementProperties" class="space-y-3 text-sm">
+            <div class="text-center text-gray-500 italic py-8">
+              Select an element to edit its properties
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="font-bold text-[var(--primary-color-light)] mb-3">Page Settings</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block mb-1 text-xs font-medium">Background Color</label>
+              <div class="flex gap-2">
+                <input type="color" id="pageBgColor" class="h-8 w-8 rounded cursor-pointer">
+                <select id="pageBgPresets" class="flex-grow text-xs p-1 rounded border">
+                  <option value="#ffffff">White</option>
+                  <option value="#f8fafc">Light Gray</option>
+                  <option value="#f1f5f9">Silver</option>
+                  <option value="#f8f8ff">Ghost White</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block mb-1 text-xs font-medium">Text Color</label>
+              <div class="flex gap-2">
+                <input type="color" id="pageTextColor" class="h-8 w-8 rounded cursor-pointer">
+                <select id="pageTextPresets" class="flex-grow text-xs p-1 rounded border">
+                  <option value="#000000">Black</option>
+                  <option value="#1e293b">Dark Blue</option>
+                  <option value="#334155">Slate</option>
+                  <option value="#374151">Gray</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block mb-1 text-xs font-medium">Font Family</label>
+              <select id="pageFontFamily" class="w-full text-xs p-2 rounded border">
+                <option value="font-sans">Sans-serif</option>
+                <option value="font-serif">Serif</option>
+                <option value="font-mono">Monospace</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Panel: Preview and Canvas -->
+      <div class="flex-grow flex flex-col overflow-hidden">
+        <!-- Top Toolbar -->
+        <div class="flex justify-between items-center bg-[var(--bg-blur)] border-b border-[var(--border-main)] p-3">
+          <div class="flex gap-2">
+            <button onclick="undoChange()" class="toolbar-btn" title="Undo">
+              <i class="fas fa-undo"></i>
+            </button>
+            <button onclick="redoChange()" class="toolbar-btn" title="Redo">
+              <i class="fas fa-redo"></i>
+            </button>
+            <div class="h-6 mx-2 border-r border-[var(--border-main)]"></div>
+            <button onclick="alignLeft()" class="toolbar-btn" title="Align Left">
+              <i class="fas fa-align-left"></i>
+            </button>
+            <button onclick="alignCenter()" class="toolbar-btn" title="Align Center">
+              <i class="fas fa-align-center"></i>
+            </button>
+            <button onclick="alignRight()" class="toolbar-btn" title="Align Right">
+              <i class="fas fa-align-right"></i>
+            </button>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="previewPage()" class="toolbar-btn" title="Preview">
+              <i class="fas fa-eye"></i>
+            </button>
+            <div class="h-6 mx-2 border-r border-[var(--border-main)]"></div>
+            <select id="devicePreview" class="text-xs p-1 rounded border">
+              <option value="desktop">Desktop</option>
+              <option value="tablet">Tablet</option>
+              <option value="mobile">Mobile</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Canvas Area -->
+        <div id="builderCanvas" class="flex-grow p-4 overflow-auto relative bg-gray-100">
+          <!-- Editable elements will appear here -->
+          <div id="canvasContent" class="min-h-full w-full bg-white shadow-md rounded-lg mx-auto transition-all" style="max-width: 1200px;">
+            <!-- Content will be loaded here -->
+          </div>
+        </div>
+        
+        <!-- Bottom Controls -->
+        <div class="bg-[var(--bg-blur)] border-t border-[var(--border-main)] p-4 flex justify-between">
+          <button onclick="closeVisualBuilder()" class="px-6 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition">
+            Cancel
+          </button>
+          <div class="flex gap-3">
+            <button onclick="previewChanges()" class="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition">
+              Preview
+            </button>
+            <button onclick="saveBuilderChanges()" class="px-6 py-2 rounded-lg bg-[var(--primary-color)] text-white hover:bg-[var(--primary-color-dark)] transition">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div> <!-- Close inner card container -->
+</div> <!-- Close full width wrapper -->
+
+
+<style>
+   .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(to right, #f59e0b, #ea580c);
+    color: white;
+    font-weight: 600;
+    border-radius: 9999px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .action-btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  }
+
+  .action-btn i {
+    font-size: 1rem;
+  }
+
+  .tag-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #22c55e;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .tag-score i {
+    font-size: 0.875rem;
+  }
+.action-btn {
+    @apply px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 text-white rounded-lg font-semibold shadow hover:scale-105 transition inline-flex items-center gap-2;
+  }
+
+  .tag-score {
+    @apply bg-green-600 text-white px-4 py-2 rounded-full font-semibold text-sm inline-flex items-center gap-2;
+  }
+border: 1px solid rgba(120, 120, 120, 0.3);
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid orange;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  /* Visual Builder Styles */
+  .builder-btn {
+    padding: 0.5rem 0.75rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-main);
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+  .builder-btn:hover {
+    background-color: rgba(255, 165, 0, 0.1);
+    border-color: var(--primary-color);
+  }
+  .toolbar-btn {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.15s;
+  }
+  .toolbar-btn:hover {
+    background-color: rgba(255, 165, 0, 0.2);
+  }
+  
+  /* Editable element styles */
+  .builder-element {
+    position: relative;
+    min-height: 30px;
+    margin: 5px 0;
+    padding: 8px;
+    border: 2px dashed transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .builder-element:hover {
+    border-color: #94a3b8;
+  }
+  .builder-element.selected {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 165, 0, 0.05);
+  }
+  .element-controls {
+    position: absolute;
+    top: -15px;
+    right: 5px;
+    display: none;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+  .builder-element:hover .element-controls {
+    display: flex;
+  }
+  .element-control-btn {
+    padding: 2px 5px;
+    font-size: 12px;
+    color: #64748b;
+    background: white;
+    border: none;
+    cursor: pointer;
+  }
+  .element-control-btn:hover {
+    color: var(--primary-color);
+  }
+</style>
+
+<script>
+  let currentEditUrl = '';
+  const name = "{{ name }}";  // Name of the funnel folder (use for file paths)
+  let currentBuilderPageType = '';
+  let selectedElement = null;
+  let builderHistory = [];
+  let historyPosition = -1;
+
+  // Fetch and open the editor with existing HTML
+  function editPreview(pageType) {
+    currentEditUrl = `/edit/${pageType}/${name}`;
+    fetch(currentEditUrl)
+      .then(res => res.json())
+      .then(data => {
+        const editorContent = document.getElementById('editorContent');
+        editorContent.value = sessionStorage.getItem(pageType) || data.html;  // Use sessionStorage if exists
+        document.getElementById('editorModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      });
+  }
+
+  function showLoadingSpark() {
+    document.getElementById('loadingSpark').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('loadingSpark').classList.add('hidden');
+    }, 2000);
+  }
+
+  // Close the editor modal
+  function closeEditor() {
+    document.getElementById('editorModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+  }
+
+  // Save the changes to sessionStorage temporarily
+  document.getElementById('editorForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const pageType = currentEditUrl.split('/')[2];  // 'landing' or 'thank_you'
+    const editedContent = document.getElementById('editorContent').value;
+    
+    sessionStorage.setItem(pageType, editedContent);  // Save changes locally
+
+    // Update the preview iframe with new HTML
+    const iframe = document.querySelector(`iframe[src$="${pageType}.html"]`);
+    if (iframe) {
+      iframe.srcdoc = editedContent;  // Inject content directly into iframe
+    }
+
+    closeEditor();  // Close modal
+  });
+
+  // Visual Builder Functions
+  function openVisualBuilder(pageType) {
+    currentBuilderPageType = pageType;
+    
+    // Fetch the current HTML content
+    fetch(`/edit/${pageType}/${name}`)
+      .then(res => res.json())
+      .then(data => {
+        // Get content either from session storage or from the server
+        const content = sessionStorage.getItem(pageType) || data.html;
+        
+        // Create a temporary DOM parser to extract the body content
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+        
+        // Get the body content
+        const bodyContent = doc.body.innerHTML;
+        
+        // Set the canvas content
+        document.getElementById('canvasContent').innerHTML = bodyContent;
+        
+        // Make elements editable
+        makeElementsEditable();
+        
+        // Show the builder modal
+        document.getElementById('visualBuilderModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      });
+  }
+
+  function closeVisualBuilder() {
+    document.getElementById('visualBuilderModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    
+    // Reset selected element
+    selectedElement = null;
+    resetElementProperties();
+  }
+
+  function makeElementsEditable() {
+    // Get all major elements in the canvas
+    const content = document.getElementById('canvasContent');
+    const elements = content.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div, span, button, a, img, form, input');
+    
+    // Make each element editable
+    elements.forEach((el, index) => {
+      // Skip already processed elements
+      if (el.classList.contains('builder-element')) return;
+      
+      // Skip child elements of builder elements
+      if (el.closest('.builder-element')) return;
+      
+      // Create wrapper if needed
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('builder-element');
+      wrapper.dataset.elementId = `element-${index}`;
+      
+      // Add control buttons
+      // Add control buttons
+const controls = document.createElement('div');
+controls.classList.add('element-controls');
+controls.innerHTML = `
+  <button class="element-control-btn" onclick="moveElementUp(this)" title="Move Up">↑</button>
+  <button class="element-control-btn" onclick="moveElementDown(this)" title="Move Down">↓</button>
+  <button class="element-control-btn" onclick="editElement(this)" title="Edit">✎</button>
+  <button class="element-control-btn" onclick="duplicateElement(this)" title="Duplicate">⧉</button>
+  <button class="element-control-btn" onclick="removeElement(this)" title="Remove">×</button>
+`;
+
+// Replace the element with the wrapped version
+el.parentNode.insertBefore(wrapper, el);
+wrapper.appendChild(el);
+wrapper.appendChild(controls);
+
+// Make the element selectable
+wrapper.addEventListener('click', (e) => {
+  // Only select if clicking directly on the wrapper or the element (not controls)
+  if (e.target === wrapper || e.target === el) {
+    selectElement(wrapper);
+    e.stopPropagation();
+  }
+});
+});
+}
+
+function selectElement(element) {
+  // Clear previous selection
+  if (selectedElement) {
+    selectedElement.classList.remove('selected');
+  }
+  
+  // Set new selection
+  selectedElement = element;
+  element.classList.add('selected');
+  
+  // Update properties panel
+  updateElementProperties(element);
+}
+
+function updateElementProperties(element) {
+  const propertiesPanel = document.getElementById('elementProperties');
+  const actualElement = element.querySelector('*:not(.element-controls)');
+  
+  // Store the current element for later reference
+  window.currentEditingElement = actualElement;
+  
+  let propertiesHTML = '';
+  
+  // Basic properties for all elements
+  propertiesHTML += `
+    <div>
+      <label class="block mb-1 text-xs font-medium">Element Type</label>
+      <div class="px-3 py-2 bg-gray-100 rounded text-sm">${actualElement.tagName.toLowerCase()}</div>
+    </div>
+  `;
+  
+  // Text content for text elements
+  if (['H1','H2','H3','H4','H5','H6','P','SPAN','BUTTON','A','LABEL','LI'].includes(actualElement.tagName)) {
+    propertiesHTML += `
+      <div>
+        <label class="block mb-1 text-xs font-medium">Text Content</label>
+        <textarea id="elementText" class="w-full text-xs p-2 rounded border resize-none h-20">${actualElement.innerText}</textarea>
+        <button onclick="updateElementText()" class="text-xs mt-1 px-2 py-1 bg-blue-500 text-white rounded">Update Text</button>
+      </div>
+    `;
+  }
+  
+  // Tailwind style properties
+  propertiesHTML += `
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Text Color</label>
+      <select id="tailwindTextColor" class="w-full text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'text')">
+        <option value="">Select color...</option>
+        <option value="text-orange-500">Orange</option>
+        <option value="text-yellow-500">Yellow</option>
+        <option value="text-red-500">Red</option>
+        <option value="text-blue-500">Blue</option>
+        <option value="text-green-500">Green</option>
+        <option value="text-purple-500">Purple</option>
+        <option value="text-gray-700">Dark Gray</option>
+        <option value="text-gray-500">Medium Gray</option>
+        <option value="text-gray-300">Light Gray</option>
+        <option value="text-white">White</option>
+        <option value="text-black">Black</option>
+      </select>
+    </div>
+    
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Background</label>
+      <select id="tailwindBgColor" class="w-full text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'bg')">
+        <option value="">Select background...</option>
+        <option value="bg-white">White</option>
+        <option value="bg-gray-50">Light Gray</option>
+        <option value="bg-gray-100">Silver</option>
+        <option value="bg-gray-200">Medium Gray</option>
+        <option value="bg-gray-800">Dark Gray</option>
+        <option value="bg-orange-500">Orange</option>
+        <option value="bg-yellow-500">Yellow</option>
+        <option value="bg-blue-500">Blue</option>
+        <option value="bg-red-500">Red</option>
+        <option value="bg-green-500">Green</option>
+      </select>
+    </div>
+    
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Font Size</label>
+      <select id="tailwindFontSize" class="w-full text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'text-size')">
+        <option value="">Select size...</option>
+        <option value="text-xs">Extra Small</option>
+        <option value="text-sm">Small</option>
+        <option value="text-base">Base</option>
+        <option value="text-lg">Large</option>
+        <option value="text-xl">Extra Large</option>
+        <option value="text-2xl">2X Large</option>
+        <option value="text-3xl">3X Large</option>
+        <option value="text-4xl">4X Large</option>
+      </select>
+    </div>
+    
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Font Weight</label>
+      <select id="tailwindFontWeight" class="w-full text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'font-weight')">
+        <option value="">Select weight...</option>
+        <option value="font-normal">Normal</option>
+        <option value="font-medium">Medium</option>
+        <option value="font-semibold">Semibold</option>
+        <option value="font-bold">Bold</option>
+        <option value="font-extrabold">Extra Bold</option>
+      </select>
+    </div>
+    
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Padding</label>
+      <div class="grid grid-cols-2 gap-2">
+        <select id="tailwindPaddingY" class="text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'py')">
+          <option value="">Pad Y...</option>
+          <option value="py-0">None</option>
+          <option value="py-1">XS</option>
+          <option value="py-2">SM</option>
+          <option value="py-3">MD</option>
+          <option value="py-4">LG</option>
+          <option value="py-6">XL</option>
+          <option value="py-8">2XL</option>
+        </select>
+        <select id="tailwindPaddingX" class="text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'px')">
+          <option value="">Pad X...</option>
+          <option value="px-0">None</option>
+          <option value="px-1">XS</option>
+          <option value="px-2">SM</option>
+          <option value="px-3">MD</option>
+          <option value="px-4">LG</option>
+          <option value="px-6">XL</option>
+          <option value="px-8">2XL</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Margin</label>
+      <div class="grid grid-cols-2 gap-2">
+        <select id="tailwindMarginY" class="text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'my')">
+          <option value="">Margin Y...</option>
+          <option value="my-0">None</option>
+          <option value="my-1">XS</option>
+          <option value="my-2">SM</option>
+          <option value="my-3">MD</option>
+          <option value="my-4">LG</option>
+          <option value="my-6">XL</option>
+          <option value="my-8">2XL</option>
+        </select>
+        <select id="tailwindMarginX" class="text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'mx')">
+          <option value="">Margin X...</option>
+          <option value="mx-0">None</option>
+          <option value="mx-1">XS</option>
+          <option value="mx-2">SM</option>
+          <option value="mx-3">MD</option>
+          <option value="mx-4">LG</option>
+          <option value="mx-6">XL</option>
+          <option value="mx-8">2XL</option>
+          <option value="mx-auto">Auto</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Border & Rounded</label>
+      <div class="grid grid-cols-2 gap-2">
+        <select id="tailwindBorder" class="text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'border')">
+          <option value="">Border...</option>
+          <option value="border-0">None</option>
+          <option value="border">Default</option>
+          <option value="border-2">Medium</option>
+          <option value="border-4">Thick</option>
+        </select>
+        <select id="tailwindRounded" class="text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'rounded')">
+          <option value="">Rounded...</option>
+          <option value="rounded-none">None</option>
+          <option value="rounded">Default</option>
+          <option value="rounded-md">Medium</option>
+          <option value="rounded-lg">Large</option>
+          <option value="rounded-xl">XL</option>
+          <option value="rounded-full">Full</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="mt-2">
+      <label class="block mb-1 text-xs font-medium">Tailwind Shadow</label>
+      <select id="tailwindShadow" class="w-full text-xs p-2 rounded border" onchange="applyTailwindClass(this, 'shadow')">
+        <option value="">Select shadow...</option>
+        <option value="shadow-none">None</option>
+        <option value="shadow-sm">Small</option>
+        <option value="shadow">Default</option>
+        <option value="shadow-md">Medium</option>
+        <option value="shadow-lg">Large</option>
+        <option value="shadow-xl">Extra Large</option>
+        <option value="shadow-2xl">2X Large</option>
+      </select>
+    </div>
+  `;
+   // Additional properties for specific elements
+  if (actualElement.tagName === 'IMG') {
+    propertiesHTML += `
+      <div class="mt-4">
+        <label class="block mb-1 text-xs font-medium">Image Source</label>
+        <input type="text" id="elementImgSrc" class="w-full text-xs p-2 rounded border" value="${actualElement.src || ''}">
+        <button onclick="updateElementImgSrc()" class="text-xs mt-1 px-2 py-1 bg-blue-500 text-white rounded">Update Source</button>
+      </div>
+      
+      <div class="mt-2">
+        <label class="block mb-1 text-xs font-medium">Image Alt Text</label>
+        <input type="text" id="elementImgAlt" class="w-full text-xs p-2 rounded border" value="${actualElement.alt || ''}">
+        <button onclick="updateElementImgAlt()" class="text-xs mt-1 px-2 py-1 bg-blue-500 text-white rounded">Update Alt</button>
+      </div>
+    `;
+  }
+  
+  if (actualElement.tagName === 'A') {
+    propertiesHTML += `
+      <div class="mt-4">
+        <label class="block mb-1 text-xs font-medium">Link URL</label>
+        <input type="text" id="elementHref" class="w-full text-xs p-2 rounded border" value="${actualElement.href || ''}">
+        <button onclick="updateElementHref()" class="text-xs mt-1 px-2 py-1 bg-blue-500 text-white rounded">Update URL</button>
+      </div>
+    `;
+  }
+  
+  if (actualElement.tagName === 'BUTTON') {
+    propertiesHTML += `
+      <div class="mt-4">
+        <label class="block mb-1 text-xs font-medium">Button Style</label>
+        <select id="buttonStyle" class="w-full text-xs p-2 rounded border" onchange="applyButtonStyle(this.value)">
+          <option value="">Select style...</option>
+          <option value="primary">Primary Orange</option>
+          <option value="secondary">Secondary Blue</option>
+          <option value="outline">Outline</option>
+          <option value="gradient">Gradient</option>
+          <option value="white">White</option>
+        </select>
+      </div>
+    `;
+  }
+  
+  // Add quick class editor
+  propertiesHTML += `
+    <div class="mt-4 pt-4 border-t border-gray-200">
+      <label class="block mb-1 text-xs font-medium">Current Tailwind Classes</label>
+      <textarea id="tailwindClassEditor" class="w-full text-xs p-2 rounded border resize-none h-20">${actualElement.className}</textarea>
+      <button onclick="updateTailwindClasses()" class="text-xs mt-1 px-2 py-1 bg-blue-500 text-white rounded">Apply Classes</button>
+    </div>
+  `;
+  
+  // Update properties panel
+  propertiesPanel.innerHTML = propertiesHTML;
+  
+  // Add event listeners for real-time preview
+  const fontSizeInput = document.getElementById('elementFontSize');
+  if (fontSizeInput) {
+    fontSizeInput.addEventListener('input', () => {
+      document.getElementById('fontSizeValue').textContent = `${fontSizeInput.value}px`;
+    });
+  }
+}
+
+// Utility functions for element manipulation
+function updateElementText() {
+  if (!selectedElement) return;
+  
+  const actualElement = selectedElement.querySelector('*:not(.element-controls)');
+  const newText = document.getElementById('elementText').value;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  // Update element
+  actualElement.innerText = newText;
+}
+
+function updateElementColor(type) {
+  if (!selectedElement) return;
+  
+  const actualElement = selectedElement.querySelector('*:not(.element-controls)');
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  if (type === 'text') {
+    const color = document.getElementById('elementTextColor').value;
+    actualElement.style.color = color;
+  } else if (type === 'bg') {
+    const color = document.getElementById('elementBgColor').value;
+    actualElement.style.backgroundColor = color;
+  }
+}
+
+function updateElementFontSize() {
+  if (!selectedElement) return;
+  
+  const actualElement = selectedElement.querySelector('*:not(.element-controls)');
+  const fontSize = document.getElementById('elementFontSize').value;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  actualElement.style.fontSize = `${fontSize}px`;
+}
+
+function updateElementSpacing() {
+  if (!selectedElement) return;
+  
+  const actualElement = selectedElement.querySelector('*:not(.element-controls)');
+  const padding = document.getElementById('elementPadding').value;
+  const margin = document.getElementById('elementMargin').value;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  actualElement.style.padding = `${padding}px`;
+  actualElement.style.margin = `${margin}px`;
+}
+
+function updateElementImgSrc() {
+  if (!selectedElement) return;
+  
+  const actualElement = selectedElement.querySelector('img');
+  if (!actualElement) return;
+  
+  const src = document.getElementById('elementImgSrc').value;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  actualElement.src = src;
+}
+
+function updateElementHref() {
+  if (!selectedElement) return;
+  
+  const actualElement = selectedElement.querySelector('a');
+  if (!actualElement) return;
+  
+  const href = document.getElementById('elementHref').value;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  actualElement.href = href;
+}
+
+// Element movement functions
+function moveElementUp(button) {
+  const element = button.closest('.builder-element');
+  const prev = element.previousElementSibling;
+  
+  if (prev && prev.classList.contains('builder-element')) {
+    // Save to history for undo/redo
+    saveToHistory();
+    
+    element.parentNode.insertBefore(element, prev);
+    selectElement(element);
+  }
+}
+
+function moveElementDown(button) {
+  const element = button.closest('.builder-element');
+  const next = element.nextElementSibling;
+  
+  if (next && next.classList.contains('builder-element')) {
+    // Save to history for undo/redo
+    saveToHistory();
+    
+    element.parentNode.insertBefore(next, element);
+    selectElement(element);
+  }
+}
+
+function editElement(button) {
+  const element = button.closest('.builder-element');
+  selectElement(element);
+}
+
+function duplicateElement(button) {
+  const element = button.closest('.builder-element');
+  const clone = element.cloneNode(true);
+  
+  // Generate new unique ID
+  clone.dataset.elementId = `element-${Date.now()}`;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  // Insert after original
+  element.parentNode.insertBefore(clone, element.nextSibling);
+  
+  // Make the new element interactive
+  makeElementsEditable();
+  
+  // Select the new element
+  selectElement(clone);
+}
+
+function removeElement(button) {
+  const element = button.closest('.builder-element');
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  // Remove element
+  element.remove();
+  
+  // Clear selection
+  selectedElement = null;
+  resetElementProperties();
+}
+
+function resetElementProperties() {
+  const propertiesPanel = document.getElementById('elementProperties');
+  propertiesPanel.innerHTML = `
+    <div class="text-center text-gray-500 italic py-8">
+      Select an element to edit its properties
+    </div>
+  `;
+}
+
+// Add new elements to the canvas
+function addElement(type) {
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  let newElement;
+  
+  switch (type) {
+    case 'heading':
+      newElement = document.createElement('h2');
+      newElement.textContent = 'New Heading';
+      newElement.style.fontSize = '24px';
+      newElement.style.fontWeight = 'bold';
+      newElement.style.margin = '15px 0';
+      break;
+      
+    case 'paragraph':
+      newElement = document.createElement('p');
+      newElement.textContent = 'This is a new paragraph of text. Click to edit the content.';
+      newElement.style.margin = '10px 0';
+      break;
+      
+    case 'button':
+      newElement = document.createElement('button');
+      newElement.textContent = 'Click Me';
+      newElement.className = 'px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition';
+      break;
+      
+    case 'image':
+      newElement = document.createElement('img');
+      newElement.src = '/static/img/placeholder.jpg';
+      newElement.alt = 'Placeholder Image';
+      newElement.className = 'max-w-full h-auto';
+      break;
+      
+    case 'form':
+      newElement = document.createElement('form');
+      newElement.innerHTML = `
+        <div class="space-y-4 p-6 border rounded-lg">
+          <div>
+            <label class="block mb-2">Your Name</label>
+            <input type="text" placeholder="Enter your name" class="w-full px-4 py-2 border rounded">
+          </div>
+          <div>
+            <label class="block mb-2">Email Address</label>
+            <input type="email" placeholder="Enter your email" class="w-full px-4 py-2 border rounded">
+          </div>
+          <button type="button" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">Submit</button>
+        </div>
+      `;
+      break;
+      
+    case 'video':
+      newElement = document.createElement('div');
+      newElement.innerHTML = `
+        <div class="aspect-w-16 aspect-h-9">
+          <div class="w-full h-0 pb-[56.25%] bg-gray-200 relative flex items-center justify-center">
+            <span class="text-gray-500">Video Placeholder</span>
+          </div>
+        </div>
+      `;
+      break;
+      
+    case 'testimonial':
+      newElement = document.createElement('div');
+      newElement.innerHTML = `
+        <div class="p-6 border rounded-lg bg-gray-50">
+          <p class="italic mb-4">"This is an amazing product that changed my life!"</p>
+          <div class="flex items-center">
+            <div class="w-10 h-10 rounded-full bg-gray-300 mr-3"></div>
+            <div>
+              <p class="font-bold">John Smith</p>
+              <p class="text-sm text-gray-600">CEO, Example Company</p>
+            </div>
+          </div>
+        </div>
+      `;
+      break;
+      
+    case 'divider':
+      newElement = document.createElement('hr');
+      newElement.className = 'my-6 border-t border-gray-300';
+      break;
+      
+    default:
+      return;
+  }
+  
+  // Create wrapper for the new element
+  const wrapper = document.createElement('div');
+  wrapper.classList.add('builder-element');
+  wrapper.dataset.elementId = `element-${Date.now()}`;
+  
+  // Add controls
+  const controls = document.createElement('div');
+  controls.classList.add('element-controls');
+  controls.innerHTML = `
+    <button class="element-control-btn" onclick="moveElementUp(this)" title="Move Up">↑</button>
+    <button class="element-control-btn" onclick="moveElementDown(this)" title="Move Down">↓</button>
+    <button class="element-control-btn" onclick="editElement(this)" title="Edit">✎</button>
+    <button class="element-control-btn" onclick="duplicateElement(this)" title="Duplicate">⧉</button>
+    <button class="element-control-btn" onclick="removeElement(this)" title="Remove">×</button>
+  `;
+  
+  // Add new element to wrapper
+  wrapper.appendChild(newElement);
+  wrapper.appendChild(controls);
+  
+  // Add event listener for selecting
+  wrapper.addEventListener('click', (e) => {
+    if (e.target === wrapper || e.target === newElement) {
+      selectElement(wrapper);
+      e.stopPropagation();
+    }
+  });
+  
+  // Add to canvas
+  document.getElementById('canvasContent').appendChild(wrapper);
+  
+  // Select the new element
+  selectElement(wrapper);
+}
+
+// Alignment functions
+function alignLeft() {
+  if (!selectedElement) return;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  const actualElement = selectedElement.querySelector('*:not(.element-controls)');
+  actualElement.style.textAlign = 'left';
+}
+
+function alignCenter() {
+  if (!selectedElement) return;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  const actualElement = selectedElement.querySelector('*:not(.element-controls)');
+  actualElement.style.textAlign = 'center';
+}
+
+function alignRight() {
+  if (!selectedElement) return;
+  
+  // Save to history for undo/redo
+  saveToHistory();
+  
+  const actualElement = selectedElement.querySelector('*:not(.element-controls)');
+  actualElement.style.textAlign = 'right';
+}
+
+// History management for undo/redo
+function saveToHistory() {
+  const content = document.getElementById('canvasContent').innerHTML;
+  
+  // If we're not at the end of the history stack, truncate it
+  if (historyPosition < builderHistory.length - 1) {
+    builderHistory = builderHistory.slice(0, historyPosition + 1);
+  }
+  
+  builderHistory.push(content);
+  historyPosition = builderHistory.length - 1;
+}
+
+function undoChange() {
+  if (historyPosition <= 0) return;
+  
+  historyPosition--;
+  document.getElementById('canvasContent').innerHTML = builderHistory[historyPosition];
+  makeElementsEditable();
+}
+
+function redoChange() {
+  if (historyPosition >= builderHistory.length - 1) return;
+  
+  historyPosition++;
+  document.getElementById('canvasContent').innerHTML = builderHistory[historyPosition];
+  makeElementsEditable();
+}
+
+// Device preview functions
+document.getElementById('devicePreview').addEventListener('change', function() {
+  const canvas = document.getElementById('canvasContent');
+  const value = this.value;
+  
+  switch (value) {
+    case 'desktop':
+      canvas.style.maxWidth = '1200px';
+      break;
+    case 'tablet':
+      canvas.style.maxWidth = '768px';
+      break;
+    case 'mobile':
+      canvas.style.maxWidth = '375px';
+      break;
+  }
+});
+
+// Page settings functions
+document.getElementById('pageBgColor').addEventListener('input', function() {
+  document.getElementById('canvasContent').style.backgroundColor = this.value;
+});
+
+document.getElementById('pageTextColor').addEventListener('input', function() {
+  document.getElementById('canvasContent').style.color = this.value;
+});
+
+document.getElementById('pageBgPresets').addEventListener('change', function() {
+  const bgColor = this.value;
+  document.getElementById('pageBgColor').value = bgColor;
+  document.getElementById('canvasContent').style.backgroundColor = bgColor;
+});
+
+document.getElementById('pageTextPresets').addEventListener('change', function() {
+  const textColor = this.value;
+  document.getElementById('pageTextColor').value = textColor;
+  document.getElementById('canvasContent').style.color = textColor;
+});
+
+document.getElementById('pageFontFamily').addEventListener('change', function() {
+  const fontFamily = this.value;
+  document.getElementById('canvasContent').className = fontFamily;
+});
+
+// Preview changes
+function previewPage() {
+  // Show a preview in a new window/tab
+  const content = document.getElementById('canvasContent').innerHTML;
+  const previewWindow = window.open('', '_blank');
+  previewWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Page Preview</title>
+      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+      <div class="container mx-auto px-4 py-8">
+        ${content}
+      </div>
+    </body>
+    </html>
+  `);
+  previewWindow.document.close();
+}
+
+// Save changes from visual builder
+function saveBuilderChanges() {
+  // Get the content from the canvas
+  const content = document.getElementById('canvasContent').innerHTML;
+  
+  // Store in session storage
+  sessionStorage.setItem(currentBuilderPageType, content);
+  
+  // Update the preview iframe
+  const iframe = document.querySelector(`iframe[src$="${currentBuilderPageType}.html"]`);
+  if (iframe) {
+    iframe.srcdoc = content;
+  }
+  
+  // Close the builder
+  closeVisualBuilder();
+}
+
+// Utility function to convert RGB to HEX
+function rgbToHex(rgb) {
+  // Default to black if color is transparent or undefined
+  if (!rgb || rgb === 'rgba(0, 0, 0, 0)' || rgb === 'transparent') {
+    return '#000000';
+  }
+  
+  // Check if already in hex format
+  if (rgb.startsWith('#')) {
+    return rgb;
+  }
+  
+  // Extract RGB values
+  const rgbArr = rgb.match(/\d+/g);
+  if (!rgbArr || rgbArr.length < 3) {
+    return '#000000';
+  }
+  
+  const r = parseInt(rgbArr[0]);
+  const g = parseInt(rgbArr[1]);
+  const b = parseInt(rgbArr[2]);
+  
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+// Function to download the HTML file
+function triggerDownload(pageType) {
+  // Get HTML content either from session storage or iframe
+  let content;
+  if (sessionStorage.getItem(pageType)) {
+    content = sessionStorage.getItem(pageType);
+  } else {
+    const iframe = document.querySelector(`iframe[src$="${pageType}.html"]`);
+    if (iframe.contentDocument) {
+      content = iframe.contentDocument.documentElement.outerHTML;
+    }
+  }
+  
+  if (content) {
+    // Create a blob and trigger download
+    const blob = new Blob([content], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${pageType}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+}
+</script>
+</div> <!-- Main container close -->
+{% endblock %}

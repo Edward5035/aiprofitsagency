@@ -1,0 +1,12 @@
+Hi {{name}},
+
+Just checking in—did you get a chance to review our strategy session offer?
+
+This free call could help you save thousands and create a clear roadmap for your finances.
+
+📅 Spots are filling fast—schedule now: [link]
+
+Let’s take the first step, together.
+
+Your future self will thank you,  
+{{Your Name}}

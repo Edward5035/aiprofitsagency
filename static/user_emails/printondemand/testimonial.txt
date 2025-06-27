@@ -1,0 +1,13 @@
+Subject: “I get compliments every time I wear it!”
+
+Body:
+Hey {{name}},
+
+Here’s what Jamie had to say:
+
+“This tee is now my favorite. The quality is top-tier, and the design? Even better in person.”
+
+We believe great design speaks volumes — and our customers agree.
+
+Ready to wear something worth talking about?
+[See Customer Favorites →]

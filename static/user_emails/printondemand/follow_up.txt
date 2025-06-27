@@ -1,0 +1,12 @@
+Subject: Still thinking it over? Your cart’s waiting 🛒
+
+Body:
+Hi {{name}},
+
+We noticed you left some creative gold behind. Just a quick reminder — your items are still in your cart, but they won’t be forever!
+
+💡 Want help customizing it? We’re just one click away.
+
+Come back and finish your order today — and don’t forget to use code WELCOME10 for 10% off.
+
+[Return to Cart →]

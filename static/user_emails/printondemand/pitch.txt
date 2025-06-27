@@ -1,0 +1,13 @@
+Subject: Your Next Favorite Shirt Is Just One Click Away 👕
+
+Body:
+Hi {{name}},
+
+We thought you might love our newest collection — designed for creators, dreamers, and bold thinkers.
+
+🛍️ Made-to-order. Zero waste. Maximum style.
+
+Shop limited-edition designs today and enjoy free shipping on your first order.
+
+👇 Tap below and make it yours:
+[Explore Now]

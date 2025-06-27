@@ -1,0 +1,15 @@
+Subject: We Miss You — Here’s 15% Off to Say Hello Again 👋
+
+Body:
+Hi {{name}},
+
+It’s been a while — and we’d love to have you back!
+
+We’re always launching fresh new designs, adding more customization options, and making it easier to get what you love.
+
+As a thank-you, here’s 15% off your next order: WELCOME15
+
+[Come Back & Browse]
+
+See what’s new — we think you’ll love it.
+

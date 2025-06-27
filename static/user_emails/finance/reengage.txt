@@ -1,0 +1,12 @@
+Hi {{name}},
+
+We haven’t heard from you in a while, and we totally get it—life gets busy.
+
+But your financial goals deserve attention. Whether you're looking to build wealth or just need clarity, we're here to help.
+
+📈 Restart your journey with this free planning checklist: [link]
+
+Let’s get back on track—together.
+
+Warm regards,  
+{{Your Company Name}} Team

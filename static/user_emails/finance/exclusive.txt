@@ -1,0 +1,12 @@
+Hi {{name}},
+
+For the next 48 hours, we're offering a **free financial planning session**—a $199 value—exclusively to new subscribers.
+
+Why? Because we believe everyone deserves a strong start toward financial freedom.
+
+💼 Reserve your free session here before it expires: [link]
+
+This offer ends soon. Don’t miss it!
+
+To smart decisions,  
+{{Your Company Name}} Advisory Team
